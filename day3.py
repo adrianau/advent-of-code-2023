@@ -65,7 +65,7 @@ with open('day3-input.txt', 'r') as f:
     grid = [line.strip() for line in f.readlines()]
     grid_length = len(grid)  # Assuming equal grid
 
-part_numbers = []
+gear_ratios = []
 for row_num, row in enumerate(grid):
     for col_num, char in enumerate(row):
         if char in symbols:
@@ -78,6 +78,7 @@ for row_num, row in enumerate(grid):
 
             # Find start/end positions of adjacent digits to get full number
             end_x = target_y = -1
+            part_numbers = []
             for x, y in adjacent_positions:
                 # Ignore digit if part of number that was already processed
                 if y == target_y and x <= end_x:
@@ -85,7 +86,12 @@ for row_num, row in enumerate(grid):
 
                 # Use positions above to extract the part number
                 start_x, end_x, target_y = get_part_number_range(x, y)
-                part_number = grid[y][start_x:end_x]
-                part_numbers.append(int(part_number))
+                part_number = int(grid[y][start_x:end_x])
+                part_numbers.append(part_number)
 
-print(sum(part_numbers))  # 531561
+            # Get gear ratio for symbols that have two adjacent part numbers
+            if len(part_numbers) == 2:
+                gear_ratio = part_numbers[0] * part_numbers[1]
+                gear_ratios.append(gear_ratio)
+
+print(sum(gear_ratios))  # 83279367
